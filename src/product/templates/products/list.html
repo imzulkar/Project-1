@@ -99,10 +99,10 @@
                 <p>Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} out of {{ page_obj.paginator.count }}
                 </p>
 
-                <div class="pagination">
+                <!-- <div class="pagination">
                     <span class="step-links">
                         {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; first </a>
+                        <a href="?page=1">&lt; first </a>
                         <a href="?page={{ page_obj.previous_page_number }}"> previous </a>
                         {% endif %}
 
@@ -112,10 +112,33 @@
 
                         {% if page_obj.has_next %}
                         <a href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &gt;</a>
                         {% endif %}
                     </span>
-                </div>
+                </div> -->
+
+                {% if is_paginated %}
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}">&lsaquo;</a></li>
+                    {% else %}
+                    <li class="disabled"><span>&lsaquo;</span></li>
+                    {% endif %}
+                    {% for i in paginator.page_range %}
+                    {% if page_obj.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">&rsaquo;</a></li>
+                    {% else %}
+                    <li class="disabled"><span>&rsaquo;</span></li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+
             </div>
             <div class="col-md-2">
 
@@ -123,4 +146,29 @@
         </div>
     </div>
 </div>
+
+
+<style>
+    .pagination {
+        display: inline-block;
+        border: 1px solid #ddd;
+    }
+
+    .pagination li {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-left: 1px solid #ddd;
+    }
+
+    .pagination li.active {
+        background-color: #1090D9;
+        color: white;
+    }
+
+    .pagination li:hover:not(.active) {
+        background-color: #ddd;
+    }
+</style>
 {% endblock %}
