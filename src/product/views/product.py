@@ -1,4 +1,6 @@
+from dataclasses import field
 from django.views import generic
+from rest_framework import generics as rest_gen, serializers, permissions
 from time import timezone
 from product import models as product_model
 
@@ -27,3 +29,18 @@ class ProductList(generic.ListView):
         extra_context={
         'product': True}
         return context
+
+class ProductListFilterSer(serializers.ModelSerializer):
+    class Meta:
+        model = product_model.Product
+        fields = '__all__'
+
+# class ProductListFilterView(rest_gen.ListAPIView):
+#     permission_classes = [permissions.IsAuthenticated]
+#     serializer_class = ProductListFilterSer
+#     def get_queryset(self):
+#         title = self.request.query_peram.get('title')
+#         color = self.request.query_peram.get('color')
+#         range = self.request.query_peram.get('range')
+#         queryset = product_model.Product.objects.filter(Q(title__icontains=title)|(product_varient__))
+#         return queryset
